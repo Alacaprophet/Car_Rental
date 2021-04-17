@@ -6,25 +6,33 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApp.Models;
+using Application.Services;
+using Application.Services.Concrete;
 
 namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IVehicleBrandService _service;
+        public HomeController(ILogger<HomeController> logger,IVehicleBrandService vehicleBrandService)
         {
             _logger = logger;
+            _service = vehicleBrandService;
         }
 
         public IActionResult Index()
         {
+            string serviceName = _service.GetName();
+            ViewBag.ServiceName = serviceName;
             return View();
         }
 
         public IActionResult Privacy()
         {
+
+            string serviceName = _service.GetName();
+            ViewBag.ServiceName = serviceName;
             return View();
         }
 
