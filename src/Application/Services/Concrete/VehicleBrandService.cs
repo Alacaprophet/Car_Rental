@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Domain.Entities;
 using Application.Infrastructure.Persistence;
 using Domain.DTOs.Filter;
+using Domain.DTOs;
 
 namespace Application.Services.Concrete
 {
@@ -17,10 +18,16 @@ namespace Application.Services.Concrete
         {
             Context = context;
         }
-        public void Add(VehicleBrand vehicleBrand)
+        public Response Add(VehicleBrand vehicleBrand)
         {
+            int SameNumberOfRecords = Context.VehicleBrand.Where(v => v.Name == vehicleBrand.Name).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{vehicleBrand.Name} markası sistede zaten kayıtlıdır");
+            }
             Context.VehicleBrand.Add(vehicleBrand);
             Context.SaveChanges();
+            return Response.Succes($"{vehicleBrand.Name} markası başarı ile kayıt edildi");
         }
 
         public VehicleBrand GetById(int id)

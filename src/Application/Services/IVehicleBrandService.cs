@@ -1,4 +1,5 @@
-﻿using Domain.DTOs.Filter;
+﻿using Domain.DTOs;
+using Domain.DTOs.Filter;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,12 @@ namespace Application.Services
 {
     public interface IVehicleBrandService
     {
-        void Add(VehicleBrand vehicleBrand);
+        Response Add(VehicleBrand vehicleBrand);
         void Update(VehicleBrand vehicleBrand);
-        VehicleBrand GetById(int id);
         void Delete(int id);
+        VehicleBrand GetById(int id);
         List<VehicleBrand> Get(VehicleBrandFilter filter);
+
         string GetName();
     }
 }

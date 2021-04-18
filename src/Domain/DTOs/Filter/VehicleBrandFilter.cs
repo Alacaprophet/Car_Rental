@@ -8,6 +8,6 @@ namespace Domain.DTOs.Filter
 {
     public class VehicleBrandFilter
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
     }
 }
