@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Application.Services;
 using Domain.DTOs.Filter;
 using Domain.Entities;
+using Domain.DTOs;
 
 namespace WebApp.Areas.Admin.Controllers
 {
@@ -46,8 +47,12 @@ namespace WebApp.Areas.Admin.Controllers
         {
             try
             {
-                VehicleBrandService.Add(vehicleBrand);
-                return RedirectToAction(nameof(Index));
+                Response response =VehicleBrandService.Add(vehicleBrand);
+              
+                
+               ViewBag.Response = response;
+               
+                return View();
             }
             catch
             {
@@ -69,8 +74,9 @@ namespace WebApp.Areas.Admin.Controllers
         {
             try
             {
-                VehicleBrandService.Update(vehicleBrand);
-                return RedirectToAction(nameof(Index));
+               Response resp= VehicleBrandService.Update(vehicleBrand);
+                ViewBag.Response = resp;
+                return View(vehicleBrand);
             }
             catch
             {

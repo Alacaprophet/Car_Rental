@@ -20,31 +20,50 @@ namespace Application.Services.Concrete
         }
         public Response Add(VehicleBrand vehicleBrand)
         {
-            int SameNumberOfRecords = Context.VehicleBrand.Where(v => v.Name == vehicleBrand.Name).Count();
-            if (SameNumberOfRecords > 0)
+            var checkadd = CheckToAddOrUpdate(vehicleBrand);
+            if (!checkadd.IsSuccess)
             {
-                return Response.Fail($"{vehicleBrand.Name} markası sistede zaten kayıtlıdır");
+                return checkadd;
             }
             Context.VehicleBrand.Add(vehicleBrand);
             Context.SaveChanges();
             return Response.Succes($"{vehicleBrand.Name} markası başarı ile kayıt edildi");
         }
-
+        private Response CheckToAddOrUpdate(VehicleBrand vehicleBrand)
+        {
+            int SameNumberOfRecords = (from b in Context.VehicleBrand
+                                       where b.Name== vehicleBrand.Name && b.Id!= vehicleBrand.Id
+                                       select b
+                                       ).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{vehicleBrand.Name} markası sistemde zaten kayıtlıdır");
+            }
+            return Response.Succes();
+        }
         public VehicleBrand GetById(int id)
         {
             return Context.VehicleBrand.Where(v => v.Id == id).SingleOrDefault();
         } 
-        public void Update(VehicleBrand vehiclebrand)
+        public Response Update(VehicleBrand vehiclebrand)
         {
+            var checkupdate = CheckToAddOrUpdate(vehiclebrand);
+            if (!checkupdate.IsSuccess)
+            {
+                return checkupdate;
+            }
             var VehicleBrandToUpdate = GetById(vehiclebrand.Id);
             VehicleBrandToUpdate.Name = vehiclebrand.Name;
             Context.SaveChanges();
+            return Response.Succes("Marka başarıyla güncellendi");
         }
-        public void Delete(int id)
+        public Response Delete(int id)
         {
+
             var Deleting = GetById(id);
             Context.VehicleBrand.Remove(Deleting);
             Context.SaveChanges();
+            return Response.Succes("Silme işlemi başarı ile geçekleşti");
         }
         public List<VehicleBrand> Get(VehicleBrandFilter filter)
         {
