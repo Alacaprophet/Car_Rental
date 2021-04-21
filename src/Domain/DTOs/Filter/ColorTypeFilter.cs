@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.DTOs
+namespace Domain.DTOs.Filter
 {
-    public class VehicleModelFilter
+    public class ColorTypeFilter
     {
-        public string Name { get; set; }
-
     }
 }
