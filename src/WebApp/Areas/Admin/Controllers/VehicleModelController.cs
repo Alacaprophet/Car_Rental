@@ -14,7 +14,7 @@ namespace WebApp.Areas.Admin.Controllers
     [Route("admin/[controller]/[action]")]
     public class VehicleModelController : Controller
     {
-      private IVehicleModelService VehicleModelService { get; }
+        private IVehicleModelService VehicleModelService { get; }
 
         private IVehicleBrandService VehicleBrandService { get; }
         public VehicleModelController(IVehicleBrandService vehicleBrandService,IVehicleModelService vehicleModelService)
