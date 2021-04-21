@@ -1,5 +1,4 @@
-﻿using Application.Services;
-using Application.Services.Concrete;
+﻿using Application.Services.Concrete;
 using Domain.DTOs;
 using Domain.DTOs.Filter;
 using Domain.Entities;
@@ -14,43 +13,43 @@ namespace WebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("admin/[controller]/[action]")]
-    public class ColorTypeController : Controller
+    public class FuelTypeController : Controller
     {
-       
-        private IColorTypeService ColorService { get; set; }
-        public ColorTypeController(IColorTypeService service)
+        private IFuelTypeService fuelTypeService { get; set; }
+        public FuelTypeController(IFuelTypeService iFuelTypeService)
         {
-            ColorService = service;
-
+            fuelTypeService = iFuelTypeService;
         }
+        // GET: FuelTypeController
         public ActionResult Index()
         {
-            ColorTypeFilter filter = new ColorTypeFilter();
-            var item = ColorService.Get(filter);
-            return View(item);
+            FuelTypeFilter filter = new FuelTypeFilter();
+            List<FuelType> list = fuelTypeService.Get(filter);
+            return View(list);
         }
 
-        // GET: ColorTypeController/Details/5
+        // GET: FuelTypeController/Details/5
         //public ActionResult Details(int id)
         //{
-        //    return View();
+           
+        //    return View(item);
         //}
 
-        // GET: ColorTypeController/Create
+        // GET: FuelTypeController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ColorTypeController/Create
+        // POST: FuelTypeController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ColorType color)
+        public ActionResult Create(FuelType fuelType)
         {
             try
             {
-                Response respons= ColorService.Add(color);
-                ViewBag.response = respons;
+                Response response = fuelTypeService.Add(fuelType);
+                ViewBag.Response = response;
                 return View();
             }
             catch
@@ -59,22 +58,22 @@ namespace WebApp.Areas.Admin.Controllers
             }
         }
 
-        // GET: ColorTypeController/Edit/5
+        // GET: FuelTypeController/Edit/5
         public ActionResult Edit(int id)
         {
-            var item = ColorService.GetById(id);
+            var item = fuelTypeService.GetById(id);
             return View(item);
         }
 
-        // POST: ColorTypeController/Edit/5
+        // POST: FuelTypeController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(ColorType color)
+        public ActionResult Edit(FuelType fuelType)
         {
             try
             {
-                Response response = ColorService.Update(color);
-                ViewBag.response = response;
+                Response response = fuelTypeService.Update(fuelType);
+                ViewBag.Response = response;
                 return View();
             }
             catch
@@ -83,23 +82,23 @@ namespace WebApp.Areas.Admin.Controllers
             }
         }
 
-        // GET: ColorTypeController/Delete/5
+        // GET: FuelTypeController/Delete/5
         public ActionResult Delete(int id)
         {
-            var item = ColorService.GetById(id);
+            var item = fuelTypeService.GetById(id);
+
             return View(item);
         }
 
-        // POST: ColorTypeController/Delete/5
+        // POST: FuelTypeController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //int id, IFormCollection collection
-        public ActionResult Delete(ColorType color)
+        public ActionResult Delete(FuelType fuel)
         {
             try
             {
-                Response response = ColorService.Delete(color.Id);
-                ViewBag.response = response;
+                Response response = fuelTypeService.Delete(fuel.Id);
+                ViewBag.Response = response;
                 return View();
             }
             catch
