@@ -33,9 +33,7 @@ namespace Application.Services.Concrete
             var items = (from m in Context.VehicleModel
                          orderby m.Name
                          select m).ToList();
-            var items1 = (from vm in Context.VehicleModel
-                          join vb in Context.VehicleBrand on vm.VehicleBrandId equals vb.Id
-                          select new {vb.Name} );//select new {vb.Name,vm.Name}
+
             return items;
         }
 

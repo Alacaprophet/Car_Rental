@@ -9,5 +9,6 @@ namespace Domain.DTOs
     public class VehicleModelFilter
     {
         public string Name { get; set; }
+
     }
 }
