@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.DTOs.Filter
 {
-    public class ColorTypeFilter
+    public class TireTypeFilter
     {
         public string Name { get; set; }
     }
