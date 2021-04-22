@@ -34,6 +34,7 @@ namespace WebApp
             services.AddScoped<IVehicleModelService, VehicleModelService>();
             services.AddScoped<IColorTypeService, ColorTypeService>();
             services.AddScoped<IFuelTypeService, FuelTypeService>();
+            services.AddScoped<IRentalPeriodService, RentalPeriodService>();
 
 
         }

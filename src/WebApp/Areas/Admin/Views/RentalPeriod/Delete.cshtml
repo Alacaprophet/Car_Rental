@@ -1,7 +1,7 @@
-﻿@model Domain.Entities.FuelType
+﻿@model Domain.Entities.RentalPeriod
 
 @{
-    ViewData["Title"] = "Sil";
+    ViewData["Title"] = "Delete";
     Response response = ViewBag.Response;
 }
 
@@ -14,7 +14,7 @@
 <div>
     @if (response == null)
     {
-        <h4 class="text-warning">@Model.Name yakıt tipini silmek istediğinize emin misiniz?</h4>
+        <h4 class="text-warning">@Model.Name kiralama periyodunu silmek istediğinize emin misiniz?</h4>
     }
     <hr />
     <form asp-action="Delete">
@@ -36,6 +36,7 @@
 
 
         <input type="submit" value="Sil" class="btn btn-danger" /> |
-        <a asp-action="Index">Yakıt Tipi Listesine Geri Dön</a>
+
+        <a asp-action="Index">Kiralama Periyodu Listesine Geri Dön</a>
     </form>
 </div>

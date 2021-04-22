@@ -2,33 +2,40 @@
 
 @{
     ViewData["Title"] = "Araç Markası Silme";
+    Response response = ViewBag.Response;
 }
 
 <h1>Sil</h1>
-
-<h3>Silmek istediğinizden emin misiniz?</h3>
+<hr />
+@if (response != null)
+{
+    <message-box is-success="@response.IsSuccess" message="@response.Message"></message-box>
+}
 <div>
-    <h4>VehicleBrand</h4>
+    @if (response == null )
+    {
+        <h4 class="text-warning">@Model.Name kiralama periyodunu silmek istediğinize emin misiniz?</h4>
+    }
     <hr />
     <dl class="row">
         @*<dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>*@
-        
-        <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>*@
+
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         @Html.HiddenFor(m => m.Id)
         <input type="submit" value="Sil" class="btn btn-danger" /> |
-        <a asp-action="Index">Araç Marka Listesi</a>
+        <a asp-action="Index">Araç Marka Listesine Geri Dön</a>
     </form>
 </div>
