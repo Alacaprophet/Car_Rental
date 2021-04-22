@@ -14,7 +14,10 @@
 }
 <div>
 
-    <h4 class="text-warning">@Model.Name rengini silmek istediğinize emin misiniz?</h4>
+    @if (response == null)
+    {
+        <h4 class="text-warning">@Model.Name rengini silmek istediğinize emin misiniz?</h4>
+    }
     <hr />
     <form asp-action="Delete">
         <dl class="row">

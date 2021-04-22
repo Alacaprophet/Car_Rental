@@ -1,42 +1,42 @@
-﻿@model Domain.Entities.VehicleBrand
+﻿@model Domain.Entities.RentalPeriod
 
 @{
-    ViewData["Title"] = "Araç Marka Düzenleme";
+    ViewData["Title"] = "Edit";
     Response response = ViewBag.Response;
 }
+
 <h1>Düzenle</h1>
-<h1>Araç Marka Düzenleme</h1>
 
+<h4>Kiralama Periyodu</h4>
 <hr />
-@if (response != null) { 
-<message-box is-success="@response.IsSuccess" message="@response.Message"></message-box>
-
+@if (response != null)
+{
+    <message-box is-success="@response.IsSuccess" message="@response.Message"></message-box>
 }
-
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             @*<div class="form-group">
-            <label asp-for="Id" class="control-label"></label>
-            <input asp-for="Id" class="form-control" />
-            <span asp-validation-for="Id" class="text-danger"></span>
-        </div>*@
-            @Html.HiddenFor(m=>m.Id)
+                    <label asp-for="Id" class="control-label"></label>
+                    <input asp-for="Id" class="form-control" />
+                    <span asp-validation-for="Id" class="text-danger"></span>
+                </div>*@
+            @Html.HiddenFor(m => m.Id)
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Kaydet" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Araç Marka Listesine Geri Dön</a>
+    <a asp-action="Index">Kiralama Periyodu Listesine Geri Dön</a>
 </div>
 
 @section Scripts {

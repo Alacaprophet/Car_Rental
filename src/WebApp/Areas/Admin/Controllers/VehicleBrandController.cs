@@ -98,8 +98,9 @@ namespace WebApp.Areas.Admin.Controllers
         {
             try
             {
-                VehicleBrandService.Delete(id);
-                return RedirectToAction(nameof(Index));
+               Response resp= VehicleBrandService.Delete(id);
+                ViewBag.Response = resp;
+                return View();
             }
             catch
             {
