@@ -39,8 +39,7 @@ namespace Application.Services.Concrete
         }
         public Response Delete(TransmissionType transmissionType)
         {
-            var Deleting = GetById(transmissionType.Id);
-            Context.TransmissionType.Remove(Deleting);
+            Context.TransmissionType.Remove(transmissionType);
             Context.SaveChanges();
             return Response.Succes("Silme işlemi başarı ile geçekleşti");
         }
@@ -48,6 +47,7 @@ namespace Application.Services.Concrete
         public List<TransmissionType> Get(TransmissionTypeFilter filter)
         {
             var items = (from v in Context.TransmissionType
+                         where v.Name.StartsWith(filter.Name)
                          orderby v.Name
                          select v).ToList();
             return items;

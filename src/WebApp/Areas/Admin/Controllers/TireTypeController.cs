@@ -26,6 +26,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             TireTypeFilter filter = new TireTypeFilter();
+            filter.Name = "";
             var list = TireTypeService.Get(filter);
             return View(list);
         }

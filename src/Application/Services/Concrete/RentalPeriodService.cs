@@ -16,15 +16,30 @@ namespace Application.Services.Concrete
         public RentalPeriodService(ICarRentalDbContext context) : base(context) { }
         public Response Add(RentalPeriod rentalPeriod)
         {
+            Response checkadd = CheckToAddOrUpdate(rentalPeriod);
+            if (!checkadd.IsSuccess)
+            {
+                return checkadd;
+            }
             Context.RentalPeriod.Add(rentalPeriod);
             Context.SaveChanges();
             return Response.Succes("Ekleme işlemi başarılı");
         }
-
+        private Response CheckToAddOrUpdate(RentalPeriod rentalPeriod)
+        {
+            int SameNumberOfRecords = (from b in Context.RentalPeriod
+                                       where b.Name == rentalPeriod.Name && b.Id != rentalPeriod.Id
+                                       select b
+                                       ).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{rentalPeriod.Name} kiralama periyodu sistemde zaten kayıtlıdır");
+            }
+            return Response.Succes();
+        }
         public Response Delete(RentalPeriod rentalPeriod)
         {
-            var item = GetById(rentalPeriod.Id);
-            Context.RentalPeriod.Remove(item);
+            Context.RentalPeriod.Remove(rentalPeriod);
             Context.SaveChanges();
             return Response.Succes("Silme İşlemi Başarılı");
         }
@@ -32,6 +47,7 @@ namespace Application.Services.Concrete
         public List<RentalPeriod> Get(RentalPeriodFilter filter)
         {
             var list = (from rp in Context.RentalPeriod
+                        where rp.Name.StartsWith(filter.Name)
                         orderby rp.Name ascending
                         select rp
                         ).ToList();
@@ -49,6 +65,11 @@ namespace Application.Services.Concrete
 
         public Response Update(RentalPeriod rentalPeriod)
         {
+            Response checkupdate = CheckToAddOrUpdate(rentalPeriod);
+            if (!checkupdate.IsSuccess)
+            {
+                return checkupdate;
+            }
             var updateTo = GetById(rentalPeriod.Id);
             updateTo.Name = rentalPeriod.Name;
             Context.SaveChanges();
