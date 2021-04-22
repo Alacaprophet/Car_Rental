@@ -8,6 +8,6 @@ namespace Domain.DTOs.Filter
 {
     public class RentalPeriodFilter
     {
-        string Name { get; set; }
+        public string Name { get; set; }
     }
 }
