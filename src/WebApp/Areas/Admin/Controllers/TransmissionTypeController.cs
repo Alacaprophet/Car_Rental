@@ -23,6 +23,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             TransmissionTypeFilter filter = new TransmissionTypeFilter();
+            filter.Name = "";
             var item = TransmissionService.Get(filter);
             return View(item);
         }

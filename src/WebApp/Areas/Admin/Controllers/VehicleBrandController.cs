@@ -24,6 +24,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             VehicleBrandFilter filter = new VehicleBrandFilter();
+            filter.Name = "";
             var items = VehicleBrandService.Get(filter);
             return View(items);
         }

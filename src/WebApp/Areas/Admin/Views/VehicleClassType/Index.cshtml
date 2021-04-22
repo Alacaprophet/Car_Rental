@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Domain.Entities.TransmissionType>
+﻿@model IEnumerable<Domain.Entities.VehicleClassType>
 
 @{
-    ViewData["Title"] = "Vites TipLeri";
+    ViewData["Title"] = "Araç Sınıfı";
 }
 
-<h1>Vites TipLeri</h1>
+<h1>Araç Sınıfı</h1>
 
 <p>
     <a asp-area="Admin" asp-action="Create" style="text-decoration-line:none;" class="btn btn-light text-success">Yeni Oluştur</a>
@@ -15,10 +15,13 @@
             @*<th>
                     @Html.DisplayNameFor(model => model.Id)
                 </th>*@
-            <th class="text-info">
-                Lastik Tipi
+            <th  class="text-info">
+                Araç Sınıfı
+            </th >
+            <th  class="text-info">
+                Açıklama
             </th>
-            <th class="text-info">
+            <th  class="text-info">
                 İşlemler
             </th>
         </tr>
@@ -34,7 +37,10 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "btn btn-primary" })
                     @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
                     @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
                 </td>

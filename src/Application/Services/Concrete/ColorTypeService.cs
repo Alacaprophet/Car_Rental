@@ -18,11 +18,27 @@ namespace Application.Services.Concrete
         }
         public Response Add(ColorType color)
         {
+            var checckadd = CheckToAddOrUpdate(color);
+            if (!checckadd.IsSuccess)
+            {
+                return checckadd;
+            }
             Context.ColorType.Add(color);
             Context.SaveChanges();
             return Response.Succes("Renk Ekleme Başarılı");
         }
-
+        private Response CheckToAddOrUpdate(ColorType color)
+        {
+            int SameNumberOfRecords = (from b in Context.ColorType
+                                       where b.Name == color.Name && b.Id != color.Id
+                                       select b
+                                       ).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{color.Name} rengi sistemde zaten kayıtlıdır");
+            }
+            return Response.Succes();
+        }
         public Response Delete(int id)
         {
             var DeleteTo = GetById(id);
@@ -34,6 +50,7 @@ namespace Application.Services.Concrete
         public List<ColorType> Get(ColorTypeFilter filter)
         {
             List<ColorType> list = (from a in Context.ColorType
+                                    where a.Name.StartsWith(filter.Name)
                                     orderby a.Name ascending
                                     select a
                                    ).ToList();
@@ -51,6 +68,11 @@ namespace Application.Services.Concrete
 
         public Response Update(ColorType colorType)
         {
+            var checkupdate = CheckToAddOrUpdate(colorType);
+            if (!checkupdate.IsSuccess)
+            {
+                return checkupdate;
+            }
             var item = GetById(colorType.Id);
             item.Name = colorType.Name;
             Context.SaveChanges();

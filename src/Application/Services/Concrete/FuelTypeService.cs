@@ -20,11 +20,27 @@ namespace Application.Services.Concrete
 
         public Response Add(FuelType fuelType)
         {
+            Response checkadd = CheckToAddOrUpdate(fuelType);
+            if (!checkadd.IsSuccess)
+            {
+                return checkadd;
+            }
             Context.FuelType.Add(fuelType);
             Context.SaveChanges();
             return Response.Succes("Yakıt Tipi Ekleme Başarılı");
         }
-
+        private Response CheckToAddOrUpdate(FuelType fuelType)
+        {
+            int SameNumberOfRecords = (from b in Context.FuelType
+                                       where b.Name == fuelType.Name && b.Id != fuelType.Id
+                                       select b
+                                       ).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{fuelType.Name} yakıt tipi sistemde zaten kayıtlıdır");
+            }
+            return Response.Succes();
+        }
         public Response Delete(int id)
         {
             var deleteTo = GetById(id);
@@ -36,7 +52,8 @@ namespace Application.Services.Concrete
         public List<FuelType> Get(FuelTypeFilter filter)
         {
             List<FuelType> list = (from l in Context.FuelType
-                                    orderby l.Name ascending
+                                   where l.Name.StartsWith(filter.Name)
+                                   orderby l.Name ascending
                                     select l
                                     ).ToList();
             return list;
@@ -53,6 +70,11 @@ namespace Application.Services.Concrete
 
         public Response Update(FuelType fuelType)
         {
+            Response checkupdate = CheckToAddOrUpdate(fuelType);
+            if (!checkupdate.IsSuccess)
+            {
+                return checkupdate;
+            }
             var updateTo = GetById(fuelType.Id);
             updateTo.Name = fuelType.Name;
             Context.SaveChanges();

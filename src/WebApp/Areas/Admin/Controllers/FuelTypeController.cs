@@ -24,6 +24,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             FuelTypeFilter filter = new FuelTypeFilter();
+            filter.Name = "";
             List<FuelType> list = fuelTypeService.Get(filter);
             return View(list);
         }

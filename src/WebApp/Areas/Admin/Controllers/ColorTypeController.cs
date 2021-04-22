@@ -26,6 +26,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             ColorTypeFilter filter = new ColorTypeFilter();
+            filter.Name = "";
             var item = ColorService.Get(filter);
             return View(item);
         }

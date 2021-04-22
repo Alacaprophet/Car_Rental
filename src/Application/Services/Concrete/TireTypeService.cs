@@ -16,15 +16,30 @@ namespace Application.Services.Concrete
         public TireTypeService(ICarRentalDbContext context) : base(context) { }
         public Response Add(TireType tire)
         {
+            Response checkadd = CheckToAddOrUpdate(tire);
+            if (!checkadd.IsSuccess)
+            {
+                return checkadd;
+            }
             Context.TireType.Add(tire);
             Context.SaveChanges();
             return Response.Succes("Ekleme İşlemi Başarılı");
         }
-
+        private Response CheckToAddOrUpdate(TireType tire)
+        {
+            int SameNumberOfRecords = (from b in Context.TireType
+                                       where b.Name == tire.Name && b.Id != tire.Id
+                                       select b
+                                       ).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{tire.Name} Lastik tipi sistemde zaten kayıtlıdır");
+            }
+            return Response.Succes();
+        }
         public Response Delete(TireType tire)
         {
-            TireType DeleteToTire = GetById(tire.Id);
-            Context.TireType.Remove(DeleteToTire);
+            Context.TireType.Remove(tire);
             Context.SaveChanges();
             return Response.Succes("Silme İşlemi Başarılı");
         }
@@ -32,6 +47,7 @@ namespace Application.Services.Concrete
         public List<TireType> Get(TireTypeFilter filter)
         {
             List<TireType> list = (from tt in Context.TireType
+                                   where tt.Name.StartsWith(filter.Name)
                                    orderby tt.Name ascending
                                    select tt
                                    ).ToList();
@@ -49,6 +65,11 @@ namespace Application.Services.Concrete
 
         public Response Update(TireType tire)
         {
+            Response checkupdate = CheckToAddOrUpdate(tire);
+            if (!checkupdate.IsSuccess)
+            {
+                return checkupdate;
+            }
             TireType UpdateToTire = GetById(tire.Id);
             UpdateToTire.Name = tire.Name;
             Context.SaveChanges();

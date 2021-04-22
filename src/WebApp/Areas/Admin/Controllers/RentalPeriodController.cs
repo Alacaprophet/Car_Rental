@@ -24,6 +24,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             RentalPeriodFilter filter = new RentalPeriodFilter();
+            filter.Name = "";
             List<RentalPeriod> list = rentalPeriodService.Get(filter);
             return View(list);
         }

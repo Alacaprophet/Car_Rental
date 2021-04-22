@@ -15,11 +15,27 @@ namespace Application.Services.Concrete
         public VehicleModelService(ICarRentalDbContext context) : base(context) { }
         public Response Add(VehicleModel vehicleModel)
         {
+            Response checkadd = CheckToAddOrUpdate(vehicleModel);
+            if (!checkadd.IsSuccess)
+            {
+                return checkadd;
+            }
             Context.VehicleModel.Add(vehicleModel);
             Context.SaveChanges();
             return Response.Succes("Ekleme Başarılı");
         }
-
+        private Response CheckToAddOrUpdate(VehicleModel vehicleModel)
+        {
+            int SameNumberOfRecords = (from b in Context.VehicleModel
+                                       where b.Name == vehicleModel.Name && b.Id != vehicleModel.Id
+                                       select b
+                                       ).Count();
+            if (SameNumberOfRecords > 0)
+            {
+                return Response.Fail($"{vehicleModel.Name} Vites tipi sistemde zaten kayıtlıdır");
+            }
+            return Response.Succes();
+        }
         public Response Delete(int id)
         {
             var DeleteToModel = GetById(id);
@@ -31,6 +47,7 @@ namespace Application.Services.Concrete
         public List<VehicleModel> Get(VehicleModelFilter filter)
         {
             var items = (from m in Context.VehicleModel
+                         where m.Name.StartsWith(filter.Name)
                          orderby m.Name
                          select m).ToList();
 
@@ -44,6 +61,11 @@ namespace Application.Services.Concrete
 
         public Response Update(VehicleModel vehicleModel)
         {
+            Response checkupdate = CheckToAddOrUpdate(vehicleModel);
+            if (!checkupdate.IsSuccess)
+            {
+                return checkupdate;
+            }
             var vehicleModelToUpdate = GetById(vehicleModel.Id);
             vehicleModelToUpdate.Name = vehicleModel.Name;
             vehicleModelToUpdate.VehicleBrand = vehicleModel.VehicleBrand;
