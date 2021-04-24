@@ -27,6 +27,7 @@ namespace Application.Services.Concrete
         }
         private Response CheckToAddOrUpdate(VehicleModel vehicleModel)
         {
+            bool isUpdate = vehicleModel.Id > 0;
             int SameNumberOfRecords = (from b in Context.VehicleModel
                                        where b.Name == vehicleModel.Name && 
                                        b.VehicleBrandId==vehicleModel.VehicleBrandId&&
@@ -37,6 +38,7 @@ namespace Application.Services.Concrete
             {
                 return Response.Fail($"{vehicleModel.Name} modeli sistemde zaten kayıtlıdır");
             }
+            
             return Response.Succes();
         }
         public Response Update(VehicleModel vehicleModel)
@@ -91,6 +93,7 @@ namespace Application.Services.Concrete
                             VehicleBranId=m.VehicleBrandId,
                             VehicleBrandName=m.VehicleBrand.Name
                         }).SingleOrDefault();
+           
             return item;
         }
         
