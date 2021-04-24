@@ -16,7 +16,7 @@ namespace WebApp.Areas.Admin.Controllers
     [Route("Admin/[controller]/[action]")]
     public class VehicleModelController : Controller
     {
-      private IVehicleModelService VehicleModelService { get; }
+        private IVehicleModelService VehicleModelService { get; }
 
         private IVehicleBrandService VehicleBrandService { get; }
         public VehicleModelController(IVehicleBrandService vehicleBrandService,IVehicleModelService vehicleModelService)
@@ -29,6 +29,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             VehicleModelFilter filter = new VehicleModelFilter();
+            filter.Name = "";
             var items = VehicleModelService.Get(filter);
             return View(items);
         }

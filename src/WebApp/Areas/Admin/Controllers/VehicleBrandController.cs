@@ -24,6 +24,7 @@ namespace WebApp.Areas.Admin.Controllers
         public ActionResult Index()
         {
             VehicleBrandFilter filter = new VehicleBrandFilter();
+            filter.Name = "";
             var items = VehicleBrandService.Get(filter);
             return View(items);
         }
@@ -98,8 +99,9 @@ namespace WebApp.Areas.Admin.Controllers
         {
             try
             {
-                VehicleBrandService.Delete(id);
-                return RedirectToAction(nameof(Index));
+               Response resp= VehicleBrandService.Delete(id);
+                ViewBag.Response = resp;
+                return View();
             }
             catch
             {

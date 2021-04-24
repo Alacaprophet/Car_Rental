@@ -1,18 +1,19 @@
-﻿@model Domain.Entities.VehicleBrand
+﻿@model Domain.Entities.TransmissionType
 
 @{
-    ViewData["Title"] = "Yeni Araç Markası";
+    ViewData["Title"] = "Yeni Oluştur";
     Response response = ViewBag.Response;
 }
 
+<h1>Oluştur</h1>
 
-<h1>Ekle</h1>
+<h4>Vites Tipi</h4>
+<hr />
+<hr />
 @if (response != null)
 {
     <message-box is-success="@response.IsSuccess" message="@response.Message"></message-box>
 }
-<h1>Yeni Araç Markası</h1>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -28,14 +29,14 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Ekle" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Araç Marka Listesine Geri Dön</a>
+    <a asp-action="Index">Vites Tipi Listesine Geri Dön</a>
 </div>
 
 @section Scripts {

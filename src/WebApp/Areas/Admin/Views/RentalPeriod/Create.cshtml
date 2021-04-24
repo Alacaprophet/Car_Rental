@@ -1,17 +1,16 @@
-﻿@model Domain.Entities.VehicleBrand
+﻿@model Domain.Entities.RentalPeriod
 
 @{
-    ViewData["Title"] = "Yeni Araç Markası";
+    ViewData["Title"] = "Create";
     Response response = ViewBag.Response;
 }
-
 
 <h1>Ekle</h1>
 @if (response != null)
 {
     <message-box is-success="@response.IsSuccess" message="@response.Message"></message-box>
 }
-<h1>Yeni Araç Markası</h1>
+<h4>Kiralama Periyodu</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -35,7 +34,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Araç Marka Listesine Geri Dön</a>
+    <a asp-action="Index">Kiralama Periyodu Listesine Geri Dön</a>
 </div>
 
 @section Scripts {

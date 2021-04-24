@@ -1,4 +1,4 @@
-﻿using Application.Infrastructure.Persistence;
+using Application.Infrastructure.Persistence;
 using Application.Services.Common;
 using Domain.DTOs;
 using Domain.Entities;
@@ -96,3 +96,4 @@ namespace Application.Services.Concrete
         
     }
 }
+
