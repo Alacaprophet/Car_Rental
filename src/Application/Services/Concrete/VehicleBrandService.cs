@@ -72,7 +72,7 @@ namespace Application.Services.Concrete
         }
         private Response CheckToDelete(VehicleBrand vehicleBrand)
         {
-            #region chech related models
+            
             int numberOfModels = Context.VehicleModel.Where(m => m.VehicleBrandId == vehicleBrand.Id).Count();
             if (numberOfModels>0)
             {
@@ -83,9 +83,9 @@ namespace Application.Services.Concrete
         public List<VehicleBrand> Get(VehicleBrandFilter filter)
         {
             var items = (from v in Context.VehicleBrand
-                where v.Name.StartsWith(filter.Name)
-                orderby     v.Name
-                select v).ToList();
+                            where v.Name.StartsWith(filter.Name)
+                            orderby     v.Name
+                            select v).ToList();
             return items;
         }
         public string GetName()
