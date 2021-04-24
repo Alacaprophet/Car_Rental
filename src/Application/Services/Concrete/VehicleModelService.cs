@@ -1,7 +1,8 @@
-﻿using Application.Infrastructure.Persistence;
+using Application.Infrastructure.Persistence;
 using Application.Services.Common;
 using Domain.DTOs;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Application.Services.Concrete
         public VehicleModelService(ICarRentalDbContext context) : base(context) { }
         public Response Add(VehicleModel vehicleModel)
         {
-            Response checkadd = CheckToAddOrUpdate(vehicleModel);
+            var checkadd = CheckToAddOrUpdate(vehicleModel);
             if (!checkadd.IsSuccess)
             {
                 return checkadd;
@@ -27,41 +28,20 @@ namespace Application.Services.Concrete
         private Response CheckToAddOrUpdate(VehicleModel vehicleModel)
         {
             int SameNumberOfRecords = (from b in Context.VehicleModel
-                                       where b.Name == vehicleModel.Name && b.Id != vehicleModel.Id
+                                       where b.Name == vehicleModel.Name && 
+                                       b.VehicleBrandId==vehicleModel.VehicleBrandId&&
+                                       b.Id != vehicleModel.Id
                                        select b
                                        ).Count();
             if (SameNumberOfRecords > 0)
             {
-                return Response.Fail($"{vehicleModel.Name} Vites tipi sistemde zaten kayıtlıdır");
+                return Response.Fail($"{vehicleModel.Name} modeli sistemde zaten kayıtlıdır");
             }
             return Response.Succes();
         }
-        public Response Delete(int id)
-        {
-            var DeleteToModel = GetById(id);
-            Context.VehicleModel.Remove(DeleteToModel);
-            Context.SaveChanges();
-            return Response.Succes("Başarılı bir şekilde silindi");
-        }
-
-        public List<VehicleModel> Get(VehicleModelFilter filter)
-        {
-            var items = (from m in Context.VehicleModel
-                         where m.Name.StartsWith(filter.Name)
-                         orderby m.Name
-                         select m).ToList();
-
-            return items;
-        }
-
-        public VehicleModel GetById(int id)
-        {
-            return Context.VehicleModel.Where(m => m.Id == id).FirstOrDefault();
-        }
-
         public Response Update(VehicleModel vehicleModel)
         {
-            Response checkupdate = CheckToAddOrUpdate(vehicleModel);
+            var checkupdate = CheckToAddOrUpdate(vehicleModel);
             if (!checkupdate.IsSuccess)
             {
                 return checkupdate;
@@ -72,5 +52,48 @@ namespace Application.Services.Concrete
             Context.SaveChanges();
             return Response.Succes("Güncelleme Başarılı");
         }
+        public Response Delete(int id)
+        {
+            var DeleteToModel = GetById(id);
+            Context.VehicleModel.Remove(DeleteToModel);
+            Context.SaveChanges();
+            return Response.Succes("Başarılı bir şekilde silindi");
+        }
+
+        public List<VehicleModelDTO> Get(VehicleModelFilter filter)
+        {
+            var items = (from m in Context.VehicleModel
+                         join b in Context.VehicleBrand on m.VehicleBrandId equals b.Id
+                         orderby m.Name
+                         select new VehicleModelDTO 
+                                 {
+                                    Id=m.Id,
+                                    Name=m.Name,
+                                    VehicleBranId=b.Id,
+                                    VehicleBrandName=b.Name
+                                 }
+                         ).ToList();
+            return items;
+        }
+
+        public VehicleModel GetById(int id)
+        {
+            return Context.VehicleModel.Where(m => m.Id == id).FirstOrDefault();
+        }
+        public VehicleModelDTO GetDetail(int id)
+        {
+            var item = (from m in Context.VehicleModel.Include(m=>m.VehicleBrand)
+                        where m.Id == id
+                        select new VehicleModelDTO
+                        {
+                            Id = m.Id,
+                            Name = m.Name,
+                            VehicleBranId=m.VehicleBrandId,
+                            VehicleBrandName=m.VehicleBrand.Name
+                        }).SingleOrDefault();
+            return item;
+        }
+        
     }
 }
+
