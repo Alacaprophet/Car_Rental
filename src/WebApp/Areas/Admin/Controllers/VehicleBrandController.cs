@@ -111,13 +111,13 @@ namespace WebApp.Areas.Admin.Controllers
                     return View(item);
                 }
                 ViewBag.Response = resp;
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
                 ViewBag.Response = Domain.DTOs.Response.Fail("Bir hata oluştu");
                 var item = VehicleBrandService.GetById(id);
-                return View();
+                return RedirectToAction("Index");
             }
         }
     }

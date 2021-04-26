@@ -175,12 +175,12 @@ namespace WebApp.Areas.Admin.Controllers
                 Response resp = VehicleService.Delete(vehicle.Id);
                 ViewBag.Response = resp;
                 DropdownViewBag();
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
                 DropdownViewBag();
-                return View();
+                return RedirectToAction("Index");
             }
         }
     }

@@ -128,9 +128,9 @@ namespace WebApp.Areas.Admin.Controllers
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index");
             }
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }
