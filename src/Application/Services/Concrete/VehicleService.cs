@@ -1,4 +1,4 @@
-﻿using Application.Infrastructure.Persistence;
+using Application.Infrastructure.Persistence;
 using Application.Services.Common;
 using Domain.DTOs;
 using Domain.DTOs.Filter;
@@ -42,7 +42,32 @@ namespace Application.Services.Concrete
                                         join vct in Context.VehicleClassType on mode.VehicleClassTypeId equals vct.Id
                                         join ct in Context.ColorType on mode.ColorTypeId equals ct.Id
                                         join vb in Context.VehicleBrand on vm.VehicleBrandId equals vb.Id
-                                        select new VehicleDTO
+                                     where true
+                                  && (filter.VehicleModelId > 0 ? mode.VehicleModelId == filter.VehicleModelId : true)
+                                  && (filter.TransmissionTypeIds > 0 ? mode.TransmissionTypeId == filter.TransmissionTypeIds : true)
+                                  && (filter.FuelTypeIds > 0 ? mode.FuelTypeId == filter.FuelTypeIds : true)
+                                  && (filter.VehicleClassTypeIds > 0 ? mode.VehicleClassTypeId == filter.VehicleClassTypeIds : true)
+                                  && (filter.ColorTypeIds > 0 ? mode.ColorTypeId == filter.VehicleClassTypeIds : true)
+                                  && (filter.TireTypeId > 0 ? mode.TireTypeId == filter.TireTypeId : true)
+                                  &&
+                                  (
+                                        (filter.EngineDisplacementRange.Start.HasValue ? mode.EngineDisplacement>=filter.EngineDisplacementRange.Start.Value:true) 
+                                        &&
+                                        (filter.EngineDisplacementRange.End.HasValue ? mode.EngineDisplacement <= filter.EngineDisplacementRange.End.Value : true)
+                                  )
+                                  &&
+                                  (
+                                        (filter.ProductionYearRange.Start.HasValue ? mode.ProductionYear >= filter.ProductionYearRange.Start.Value : true)
+                                        &&
+                                        (filter.ProductionYearRange.End.HasValue ? mode.ProductionYear <= filter.ProductionYearRange.End.Value : true)
+                                  )
+                                  &&
+                                  (
+                                        (filter.HorsepowerRange.Start.HasValue ? mode.Horsepower>= filter.HorsepowerRange.Start.Value : true)
+                                        &&
+                                        (filter.HorsepowerRange.End.HasValue ? mode.Horsepower<= filter.HorsepowerRange.End.Value : true)
+                                  )
+                                     select new VehicleDTO
                                         {
                                             Id = mode.Id,
                                             VehicleBrandName=vb.Name,

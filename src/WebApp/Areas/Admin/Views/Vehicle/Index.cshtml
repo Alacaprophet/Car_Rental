@@ -1,11 +1,73 @@
-﻿@model IEnumerable<VehicleDTO>
+@model VehicleViewModel
 
 @{
     ViewData["Title"] = "Araç Hizmetleri";
+    List<SelectListItem> VehicleModel = ViewBag.ModelName;
+    List<SelectListItem> VehicleColor = ViewBag.ColorType;
+    List<SelectListItem> VehicleTransmission = ViewBag.Transmission;
+    List<SelectListItem> VehicleFuel = ViewBag.Fuel;
+    List<SelectListItem> VehicleTire = ViewBag.Tire;
+    List<SelectListItem> VehicleClassType = ViewBag.ClassType;
 }
 
 <h1>Araç Hizmetleri</h1>
 
+
+<form asp-action="Index" class="jumbotron jumbotron-fluid">
+   
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label asp-for="Filter.VehicleModelId" class="col-form-label"></label>
+                @Html.DropDownListFor(model => model.Filter.VehicleModelId, VehicleModel, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Filter.TransmissionTypeIds" class="col-form-label"></label>
+                @Html.DropDownListFor(model => model.Filter.TransmissionTypeIds, VehicleTransmission, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Filter.ColorTypeIds" class="col-form-label"></label>
+                @Html.DropDownListFor(model => model.Filter.ColorTypeIds, VehicleColor, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Filter.FuelTypeIds" class="col-form-label"></label>
+                @Html.DropDownListFor(model => model.Filter.FuelTypeIds, VehicleFuel, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Filter.TireTypeId" class="col-form-label"></label>
+                @Html.DropDownListFor(model => model.Filter.TireTypeId, VehicleTire, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group col-md-4">
+                <label asp-for="Filter.VehicleClassTypeIds" class="col-form-label"></label>
+                @Html.DropDownListFor(model => model.Filter.VehicleClassTypeIds, VehicleClassType, "Tümü", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="Filter.ProductionYearRange" class="col-form-label"></label>
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.Filter.ProductionYearRange.Start,"Başlangıç", new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.Filter.ProductionYearRange.End, "Bitiş",new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Filter.EngineDisplacementRange" class="col-form-label"></label>
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.Filter.EngineDisplacementRange.Start, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.Filter.EngineDisplacementRange.End, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="Filter.HorsepowerRange" class="col-form-label"></label>
+                <div class="input-group">
+                    @Html.TextBoxFor(model => model.Filter.HorsepowerRange.Start, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.Filter.HorsepowerRange.End, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Getir</button>
+   
+</form>
+<hr />
 <p>
     <a asp-area="Admin" asp-action="Create" style="text-decoration-line:none;" class="btn btn-light text-success">Yeni Oluştur</a>
 </p>
@@ -16,37 +78,37 @@
             @Html.DisplayNameFor(model => model.Id)
         </th>*@
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.VehicleBrandName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().VehicleBrandName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.VehicleModelName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().VehicleModelName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.TransmissionTypeName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().TransmissionTypeName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.FuelTypeName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().FuelTypeName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.TireTypeName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().TireTypeName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.VehicleClassTypeName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().VehicleClassTypeName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.ColorTypeName)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().ColorTypeName)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.ProductionYear)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().ProductionYear)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.EngineDisplacement)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().EngineDisplacement)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.Horsepower)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Horsepower)
             </th>
             <th class="text-info">
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Vehicles.FirstOrDefault().Description)
             </th>
             <th class="text-info">
                 İşlemler
@@ -54,7 +116,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Vehicles)
         {
         <tr>
             @*<td>

@@ -1,4 +1,4 @@
-﻿using Application.Services;
+using Application.Services;
 using Application.Services.Concrete;
 using Domain.DTOs;
 using Domain.DTOs.Filter;
@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Areas.Admin.Models;
 
 namespace WebApp.Areas.Admin.Controllers
 {
@@ -43,7 +44,19 @@ namespace WebApp.Areas.Admin.Controllers
         {
             VehicleFilter filter = new VehicleFilter();
             List<VehicleDTO> list = VehicleService.Get(filter);
-            return View(list);
+            VehicleViewModel model = new VehicleViewModel();
+            model.Filter = filter;
+            model.Vehicles = list;
+            DropdownViewBag();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Index(VehicleViewModel model)
+        {
+            var items = VehicleService.Get(model.Filter);
+            model.Vehicles = items;
+            DropdownViewBag();
+            return View(model);
         }
 
         // GET: VehicleController/Details/5
