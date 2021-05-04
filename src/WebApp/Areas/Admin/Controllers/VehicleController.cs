@@ -53,6 +53,7 @@ namespace WebApp.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult Index(VehicleViewModel model)
         {
+            
             var items = VehicleService.Get(model.Filter);
             model.Vehicles = items;
             DropdownViewBag();

@@ -4,6 +4,7 @@ using Domain.DTOs;
 using Domain.DTOs.Filter;
 using Domain.Entities;
 using Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,79 +15,119 @@ namespace Application.Services.Concrete
 {
     public class VehicleRentalPriceService : BaseService, IVehicleRentalPriceService
     {
-        public VehicleRentalPriceService(ICarRentalDbContext context) : base(context) { }
-        
+        public VehicleRentalPriceService(ICarRentalDbContext context) : base(context)
+        {
+
+        }
+
         public Response Add(VehicleRentalPrice vehicleRentalPrice)
         {
+            var checkReponse = CheckToAddOrUpdate(vehicleRentalPrice);
+            if (!checkReponse.IsSuccess)
+                return checkReponse;
+
             Context.VehicleRentalPrice.Add(vehicleRentalPrice);
             Context.SaveChanges();
-            return Response.Succes("Ekleme İşlemi Başarılı");
+
+            return Response.Succes("Kiralama tarifesi başarıyla kaydedildi");
+        }
+        public Response Update(VehicleRentalPrice vehicleRentalPrice)
+        {
+            var checkReponse = CheckToAddOrUpdate(vehicleRentalPrice);
+            if (!checkReponse.IsSuccess)
+                return checkReponse;
+
+            var vehicleRentalPriceToUpdate = GetById(vehicleRentalPrice.Id);
+            vehicleRentalPriceToUpdate.StartDate = vehicleRentalPrice.StartDate;
+            vehicleRentalPriceToUpdate.EndDate = vehicleRentalPrice.EndDate;
+            vehicleRentalPriceToUpdate.Price = vehicleRentalPrice.Price;
+            vehicleRentalPriceToUpdate.RentalPeriodId = vehicleRentalPrice.RentalPeriodId;
+            Context.SaveChanges();
+
+            return Response.Succes("Kiralama tarifesi başarıyla güncellendi");
         }
         private Response CheckToAddOrUpdate(VehicleRentalPrice vehicleRentalPrice)
         {
-            int SameNumberOfRecords = (from b in Context.VehicleRentalPrice
-                                       where b.Price == vehicleRentalPrice.Price &&b.RentalPeriod==vehicleRentalPrice.RentalPeriod && b.StartDate==vehicleRentalPrice.StartDate && b.Id != vehicleRentalPrice.Id
-                                       select b
-                                       ).Count();
-            if (SameNumberOfRecords > 0)
-            {
-                return Response.Fail($"Araç kiralama işlemleri sistemde zaten kayıtlıdır");
-            }
+
+            if (vehicleRentalPrice.StartDate > vehicleRentalPrice.EndDate)
+                return Response.Fail("Bitiş tarihi başlangıç tarihinden ileri bir tarih olmamalıdır");
+
+            int numberOfRecordsInTheSameDateRange =
+                                (from p in Context.VehicleRentalPrice
+                                 where p.VehicleId == vehicleRentalPrice.VehicleId && p.Id != vehicleRentalPrice.Id
+                                    &&
+                                    (
+                                        (p.StartDate <= vehicleRentalPrice.StartDate && p.EndDate >= vehicleRentalPrice.StartDate)
+                                        ||
+                                        (p.StartDate >= vehicleRentalPrice.StartDate && p.EndDate <= vehicleRentalPrice.EndDate)
+                                        ||
+                                        (p.StartDate <= vehicleRentalPrice.EndDate && p.EndDate >= vehicleRentalPrice.EndDate)
+                                        ||
+                                        (p.StartDate <= vehicleRentalPrice.StartDate && p.EndDate >= vehicleRentalPrice.EndDate)
+                                    )
+                                 select p
+                                ).Count();
+            if (numberOfRecordsInTheSameDateRange > 0)
+                return Response.Fail("Bu tarih aralığında kayıtlı başka bir tarife vardır");
+
             return Response.Succes();
         }
-        public Response Delete(VehicleRentalPrice vehicleRentalPrice)
+
+        public Response Delete(int id)
         {
-            throw new NotImplementedException();
+            var vehicleRentalPriceToDelete = GetById(id);
+            Context.VehicleRentalPrice.Remove(vehicleRentalPriceToDelete);
+            Context.SaveChanges();
+
+            return Response.Succes("Kiralama tarifesi başarıyla silindi");
         }
-        //var item = (from mode
-        //                  in (from vrp in Context.VehicleRentalPrice
-        //                      join v in Context.Vehicle
-        //                      on vrp.VehicleId equals v.Id
-        //                      select new { v.VehicleModelId, v.TransmissionTypeId, v.ColorTypeId, v.ProductionYear, vrp.RentalPeriodId }
-        //                      )
-        //            join rp in Context.RentalPeriod
-        //                on mode.RentalPeriodId equals rp.Id
-        //            join vm in Context.VehicleModel
-        //                on mode.VehicleModelId equals vm.Id
-        //            join tt in Context.TransmissionType
-        //                on mode.TransmissionTypeId equals tt.Id
-        //            join ct in Context.ColorType
-        //                on mode.ColorTypeId equals ct.Id
 
-        //            select new { ModelName = vm.Name, TransmissionName = tt.Name, RentalPeriod = rp.Name, ColorName = ct.Name, ProductYear = mode.ProductionYear }
-        //               ).ToList();
-        public List<VehicleRentalPriceTable> Get(VehicleRentalPriceFilter filter)
+        public VehicleRentalPrice GetById(int id)
         {
-            var item = (from mode
-                              in (from vrp in Context.VehicleRentalPrice
-                                  join v in Context.Vehicle
-                                  on vrp.VehicleId equals v.Id
-                                  select new { v.VehicleModelId, v.TransmissionTypeId, v.ColorTypeId, v.ProductionYear, vrp.RentalPeriodId,vrp.Price ,vrp.Id}
-                                  )
-                        join rp in Context.RentalPeriod
-                            on mode.RentalPeriodId equals rp.Id
-                        join vm in Context.VehicleModel
-                            on mode.VehicleModelId equals vm.Id
-                        join tt in Context.TransmissionType
-                            on mode.TransmissionTypeId equals tt.Id
-                        join ct in Context.ColorType
-                            on mode.ColorTypeId equals ct.Id
+            return Context.VehicleRentalPrice.Where(p => p.Id == id).SingleOrDefault();
+        }
 
-                        
-                        select new VehicleRentalPriceTable { ModelName = vm.Name, TransmissionName = tt.Name, PeriodName = rp.Name, ColorName = ct.Name, ProductYear = mode.ProductionYear, Fee = mode.Price , RentalPriceId =mode.Id}
-                             ).ToList();
+        public List<VehicleRentalPriceDTO> Get(VehicleRentalPriceFilter filter)
+        {
+            var items = (from p in Context.VehicleRentalPrice.Include(x => x.Vehicle.VehicleModel.VehicleBrand)
+                                                             .Include(x => x.RentalPeriod)
+                         where p.VehicleId == filter.VehicleId
+                         orderby p.StartDate descending
+                         select new VehicleRentalPriceDTO
+                         {
+                             Id = p.Id,
+                             StartDate = p.StartDate,
+                             EndDate = p.EndDate,
+                             Price = p.Price,
+                             RentalPeriodId = p.RentalPeriodId,
+                             RentalPeriodName = p.RentalPeriod.Name,
+                             VehicleId = p.VehicleId,
+                             VehicleModelName = p.Vehicle.VehicleModel.Name,
+                             VehicleBrandName = p.Vehicle.VehicleModel.VehicleBrand.Name
+                         }).ToList();
 
+            return items;
+        }
+
+
+        public VehicleRentalPriceDTO GetDetail(int id)
+        {
+            var item = (from p in Context.VehicleRentalPrice.Include(x => x.Vehicle.VehicleModel.VehicleBrand)
+                                                             .Include(x => x.RentalPeriod)
+                        where p.Id == id
+                        select new VehicleRentalPriceDTO
+                        {
+                            Id = p.Id,
+                            StartDate = p.StartDate,
+                            EndDate = p.EndDate,
+                            Price = p.Price,
+                            RentalPeriodId = p.RentalPeriodId,
+                            RentalPeriodName = p.RentalPeriod.Name,
+                            VehicleId = p.VehicleId,
+                            VehicleModelName = p.Vehicle.VehicleModel.Name,
+                            VehicleBrandName = p.Vehicle.VehicleModel.VehicleBrand.Name
+                        }).SingleOrDefault();
             return item;
-        }
-
-        public VehicleModel GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Response Update(VehicleRentalPrice vehicleRentalPrice)
-        {
-            throw new NotImplementedException();
         }
     }
 }

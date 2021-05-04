@@ -1,67 +1,59 @@
-﻿@model IEnumerable<Domain.Enums.VehicleRentalPriceTable>
+﻿@model IEnumerable<Domain.DTOs.VehicleRentalPriceDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    string vehicleName = ViewBag.VehicleName;
+    int vehicleId = ViewBag.VehicleId;
+
+    ViewData["Title"] = "Araç Kiralama Fiyat Listesi | " + vehicleName;
 }
 
-<h1>Index</h1>
+<h1>Araç Kiralama Fiyat Listesi | @vehicleName</h1>
 
 <p>
-    <a asp-area="Admin" asp-action="Create" style="text-decoration-line:none;" class="btn btn-light text-success">Yeni Oluştur</a>
+    @Html.ActionLink("Yeni Fiyat", "Create", new { vehicleId = vehicleId })
 </p>
-<table class="table table-striped table-bordered table-hover">
+<table class="table">
     <thead>
         <tr>
-            <th class="text-info">
-                Araç Modeli
+            <th>
+                @Html.DisplayNameFor(model => model.RentalPeriodName)
             </th>
-            <th class="text-info">
-                Vites Tipi
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
             </th>
-            <th class="text-info">
-               Kiralama Periyodu
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
             </th>
-            <th class="text-info">
-                Renk Tipi
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
             </th>
-            <th class="text-info">
-                Üretim Yılı
-            </th>
-            <th class="text-info">
-                Fiyat
-            </th>
-            <th class="text-info">
-                İşlemler
-            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModelName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransmissionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PeriodName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColorName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fee)
-            </td>
-            <td>
-                @Html.ActionLink("Düzenle", "Edit", new { id = item.RentalPriceId }, new { @class = "btn btn-primary" })
-                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-                @Html.ActionLink("Sil", "Delete", new { id = item.RentalPriceId }, new { @class = "btn btn-danger" })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RentalPeriodName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Sil", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+<div>
+    <a asp-action="Index" asp-controller="Vehicle">Araç Listesi</a>
+</div>

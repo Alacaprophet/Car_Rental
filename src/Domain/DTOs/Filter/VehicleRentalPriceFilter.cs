@@ -9,6 +9,11 @@ namespace Domain.DTOs.Filter
 {
     public class VehicleRentalPriceFilter
     {
+        public VehicleRentalPriceFilter(int vehicleid)
+        {
+            VehicleId = vehicleid;
+        }
+
         public int VehicleId { get; set; }
 
        

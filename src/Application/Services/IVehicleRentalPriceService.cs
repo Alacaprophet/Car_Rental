@@ -13,8 +13,9 @@ namespace Application.Services
     {
         Response Add(VehicleRentalPrice vehicleRentalPrice);
         Response Update(VehicleRentalPrice vehicleRentalPrice);
-        Response Delete(VehicleRentalPrice vehicleRentalPrice);
-        VehicleModel GetById(int id);
-        List<VehicleRentalPriceTable> Get(VehicleRentalPriceFilter filter);
+        Response Delete(int id);
+        VehicleRentalPrice GetById(int id);
+        VehicleRentalPriceDTO GetDetail(int id);
+        List<VehicleRentalPriceDTO> Get(VehicleRentalPriceFilter filter);
     }
 }
