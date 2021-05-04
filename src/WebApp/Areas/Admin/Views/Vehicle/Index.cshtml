@@ -8,12 +8,16 @@
     List<SelectListItem> VehicleFuel = ViewBag.Fuel;
     List<SelectListItem> VehicleTire = ViewBag.Tire;
     List<SelectListItem> VehicleClassType = ViewBag.ClassType;
+    var response = ViewBag.Respponse;
 }
 
 <h1>Araç Hizmetleri</h1>
+@if (response!=null)
+{
+    <h1>Çalışıtııııııııııııııııı</h1>
+}
 
-
-<form asp-action="Index" class="jumbotron jumbotron-fluid">
+<form asp-action="Index" class="jumbotron jumbotron-fluid" style="padding:20px;border-radius:20px;">
    
         <div class="form-row">
             <div class="form-group col-md-4">
@@ -156,9 +160,12 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "btn btn-info" }) 
+
+                @Html.ActionLink("Düzenle", "Edit", new { id = item.Id }, new { @class = "btn btn-info" })
                 @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
                 @Html.ActionLink("Sil", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Fiyatlar", "Index", "VehicleRentalPrice", new { vehicleId = item.Id }) 
+                @Html.ActionLink("Resimler", "Index", "VehicleImage", new { vehicleId = item.Id }) 
             </td>
         </tr>
         }
