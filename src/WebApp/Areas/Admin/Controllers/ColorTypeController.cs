@@ -101,11 +101,11 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 Response response = ColorService.Delete(color.Id);
                 ViewBag.response = response;
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index");
             }
         }
     }

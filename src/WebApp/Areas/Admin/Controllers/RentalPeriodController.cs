@@ -99,11 +99,11 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 Response response = rentalPeriodService.Delete(rent);
                 ViewBag.Response = response;
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index");
             }
         }
     }

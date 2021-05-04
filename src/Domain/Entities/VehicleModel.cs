@@ -7,9 +7,11 @@ namespace Domain.Entities
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(50),MinLength(1)]
+        [Display(Name ="Adı")]
         public string Name { get; set; }
         [Required]
+        [Display(Name = "Araç Markası")]
         public int VehicleBrandId { get; set; }
         public VehicleBrand VehicleBrand { get; set; }
     }

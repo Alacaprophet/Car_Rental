@@ -1,0 +1,52 @@
+﻿@model Domain.DTOs.VehicleModelDTO
+
+@{
+    ViewData["Title"] = "Sil";
+    Response response = ViewBag.Response;
+}
+
+<h1>Sil</h1>
+<hr />
+@if (response != null)
+{
+    <message-box is-success="@response.IsSuccess" message="@response.Message"></message-box>
+}
+<div>
+    @if (response == null)
+    {
+        <h4 class="text-warning">@Model.Name Araç modelini silmek istediğinize emin misiniz?</h4>
+    }
+    <hr />
+    <dl class="row">
+        @*<dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>*@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        @*<dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VehicleBranId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VehicleBranId)*@
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VehicleBrandName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.VehicleBrandName)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        @Html.HiddenFor(model=>model.Id)
+        <input type="submit" value="Sil" class="btn btn-danger" /> 
+        <a asp-action="Index">Araç Model Listesi</a>
+    </form>
+</div>

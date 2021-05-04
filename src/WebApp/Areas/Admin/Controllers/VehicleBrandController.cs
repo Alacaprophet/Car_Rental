@@ -100,12 +100,24 @@ namespace WebApp.Areas.Admin.Controllers
             try
             {
                Response resp= VehicleBrandService.Delete(id);
+                if (resp.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    var item = VehicleBrandService.GetById(id);
+                    ViewBag.Response = resp;
+                    return View(item);
+                }
                 ViewBag.Response = resp;
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                ViewBag.Response = Domain.DTOs.Response.Fail("Bir hata oluştu");
+                var item = VehicleBrandService.GetById(id);
+                return RedirectToAction("Index");
             }
         }
     }

@@ -97,11 +97,11 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 Response response = TransmissionService.Delete(transmissionType);
                 ViewBag.Response = response;
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index");
             }
         }
     }

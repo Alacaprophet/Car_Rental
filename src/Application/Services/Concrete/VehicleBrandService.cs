@@ -30,6 +30,7 @@ namespace Application.Services.Concrete
         }
         private Response CheckToAddOrUpdate(VehicleBrand vehicleBrand)
         {
+            
             int SameNumberOfRecords = (from b in Context.VehicleBrand
                                        where b.Name== vehicleBrand.Name && b.Id!= vehicleBrand.Id
                                        select b
@@ -38,6 +39,7 @@ namespace Application.Services.Concrete
             {
                 return Response.Fail($"{vehicleBrand.Name} markası sistemde zaten kayıtlıdır");
             }
+           
             return Response.Succes();
         }
         public VehicleBrand GetById(int id)
@@ -58,18 +60,32 @@ namespace Application.Services.Concrete
         }
         public Response Delete(int id)
         {
-
-            var Deleting = GetById(id);
-            Context.VehicleBrand.Remove(Deleting);
+            var vehicleBrandToDelete = GetById(id);
+            var checkResponse = CheckToDelete(vehicleBrandToDelete);
+            if (!checkResponse.IsSuccess)
+            {
+                return checkResponse;
+            }
+            Context.VehicleBrand.Remove(vehicleBrandToDelete);
             Context.SaveChanges();
             return Response.Succes("Silme işlemi başarı ile geçekleşti");
+        }
+        private Response CheckToDelete(VehicleBrand vehicleBrand)
+        {
+            
+            int numberOfModels = Context.VehicleModel.Where(m => m.VehicleBrandId == vehicleBrand.Id).Count();
+            if (numberOfModels>0)
+            {
+                return Response.Fail($"{vehicleBrand.Name} markasına ait {numberOfModels} adet model olduğundan bu marka silinemiyor");
+            }
+            return Response.Succes();
         }
         public List<VehicleBrand> Get(VehicleBrandFilter filter)
         {
             var items = (from v in Context.VehicleBrand
-                where v.Name.StartsWith(filter.Name)
-                orderby     v.Name
-                select v).ToList();
+                            where v.Name.StartsWith(filter.Name)
+                            orderby     v.Name
+                            select v).ToList();
             return items;
         }
         public string GetName()
