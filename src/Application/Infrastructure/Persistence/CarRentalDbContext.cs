@@ -20,12 +20,14 @@ namespace Application.Infrastructure.Persistence
         public DbSet<VehicleClassType> VehicleClassType { get; set; }
         public DbSet<VehicleModel> VehicleModel { get; set; }
         public DbSet<VehicleRentalPrice> VehicleRentalPrice { get; set; }
+        public DbSet<VehicleImage> VehicleImage { get; set; }
         private readonly string _connectionString;
         public CarRentalDbContext(DbContextOptions<CarRentalDbContext> options,IConfiguration configuration) : base(options)
         {
             _connectionString = configuration.GetConnectionString("CarRentalConnectionString");
         }
 
+      
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

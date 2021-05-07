@@ -68,6 +68,7 @@ namespace WebApp.Areas.Admin.Controllers
             {
                 var response = VehicleRentalPriceService.Add(vehicleRentalPrice);
                 ViewBag.Response = response;
+                return View();
             }
             catch
             {
