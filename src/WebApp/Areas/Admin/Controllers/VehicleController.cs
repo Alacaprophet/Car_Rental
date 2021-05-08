@@ -175,7 +175,7 @@ namespace WebApp.Areas.Admin.Controllers
         // GET: VehicleController/Delete/5
         public ActionResult Delete(int id)
         {
-            var deleting = VehicleService.GetDetails(id);
+            var deleting = VehicleService.GetDetail(id);
             return View(deleting);
         }
 
