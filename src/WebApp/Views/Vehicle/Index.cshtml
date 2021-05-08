@@ -1,0 +1,75 @@
+﻿@model VehicleFilter
+
+@{
+    ViewData["Title"] = "Kiralık Araç Listesi";
+    IEnumerable<VehicleListItemDTO> vehicles = ViewBag.Vehicles;
+    List<SelectListItem> VehicleModel = ViewBag.ModelName;
+    List<SelectListItem> VehicleColor = ViewBag.ColorType;
+    List<SelectListItem> VehicleTransmission = ViewBag.Transmission;
+    List<SelectListItem> VehicleFuel = ViewBag.Fuel;
+    List<SelectListItem> VehicleTire = ViewBag.Tire;
+    List<SelectListItem> VehicleClassType = ViewBag.ClassType;
+
+}
+<h1>Kiralık Araç Listesi</h1>
+<div class="row">
+    <div class="col-3 jumbotron">
+        <form asp-action="Index" method="post">
+            <div class="form-group">
+                <label asp-for="VehicleModelId" class="control-label"></label>
+                @Html.DropDownListFor(m => m.VehicleModelId, VehicleModel, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="TransmissionTypeIds" class="control-label"></label>
+                @Html.DropDownListFor(m => m.TransmissionTypeIds, VehicleTransmission, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="FuelTypeIds" class="control-label"></label>
+                @Html.DropDownListFor(m => m.FuelTypeIds, VehicleFuel, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="VehicleClassTypeIds" class="control-label"></label>
+                @Html.DropDownListFor(m => m.VehicleClassTypeIds, VehicleClassType, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="ColorTypeIds" class="control-label"></label>
+                @Html.DropDownListFor(m => m.ColorTypeIds, VehicleColor, "Tümü", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="TireTypeId" class="control-label"></label>
+                @Html.DropDownListFor(m => m.TireTypeId, VehicleTire, "Tümü", new { @class = "form-control" })
+
+            </div>
+            <button type="submit" class="btn btn-primary"> Ara</button>
+        </form>
+    </div>
+    <div class="col-9 ">
+        <div class="row">
+            @*<div class="col p-4 d-flex flex-column position-static">*@
+                @foreach (var vehicle in vehicles)
+                {
+                    <div class="col-md-6">
+                        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <strong class="d-inline-block mb-2 text-primary">@vehicle.VehicleBrandName</strong>
+                                <h3 class="mb-0">@vehicle.VehicleModelName</h3>
+                                <div class="mb-1 text-muted">Vites : @vehicle.TransmissionTypeName</div>
+                                <p class="card-text mb-auto">Yakıt : @vehicle.FuelTypeName</p>
+                                <h2>@vehicle.Price.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</h2>
+                                @Html.ActionLink("Araç Detayı", "Detail", new { id = vehicle.Id })
+
+                            </div>
+                            <div class="col-auto d-none d-lg-block">
+                                <img src="/@(!string.IsNullOrEmpty(vehicle.ImageUrl) ? vehicle.ImageUrl : "img/cars/no-image.jpg")" alt="Alternate Text" class="img-thumbnail rounded" width="200" />
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            @*</div>*@
+        </div>
+    </div>
+</div>
+
+

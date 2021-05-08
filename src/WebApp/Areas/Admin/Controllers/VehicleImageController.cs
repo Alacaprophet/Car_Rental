@@ -25,7 +25,7 @@ namespace WebApp.Areas.Admin.Controllers
 
         private void SetVehicleToViewBag(int vehicleId)
         {
-            var vehicle = VehicleService.GetDetails(vehicleId);
+            var vehicle = VehicleService.GetDetail(vehicleId);
             ViewBag.VehicleName = $"{vehicle?.VehicleBrandName} {vehicle?.VehicleModelName}";
             ViewBag.VehicleId = vehicleId;
         }

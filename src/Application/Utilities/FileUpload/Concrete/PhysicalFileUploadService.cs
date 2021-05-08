@@ -24,7 +24,7 @@ namespace Application.Utilities.FileUpload.Concrete
                 await file.CopyToAsync(stream);
             }
 
-            return Response<FileUploadResult>.Succes("", new FileUploadResult
+            return Response<FileUploadResult>.Success("", new FileUploadResult
             {
                 //      img/cars/clio.jpg
                 Url = $"{directory}{fileName}"
@@ -34,10 +34,10 @@ namespace Application.Utilities.FileUpload.Concrete
         public Response Delete(string path)
         {//path: img/cars/clio.jpg
             path = ROOT + path; //   wwwroot/img/cars/clio.jpg
-            if (File.Exists(path))
+            if(File.Exists(path))
             {
                 File.Delete(path);
-                return Response.Succes();
+                return Response.Success();
             }
             else
             {
