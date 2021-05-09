@@ -46,27 +46,27 @@
     <div class="col-9 ">
         <div class="row">
             @*<div class="col p-4 d-flex flex-column position-static">*@
-                @foreach (var vehicle in vehicles)
-                {
-                    <div class="col-md-6">
-                        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                                <strong class="d-inline-block mb-2 text-primary">@vehicle.VehicleBrandName</strong>
-                                <h3 class="mb-0">@vehicle.VehicleModelName</h3>
-                                <div class="mb-1 text-muted">Vites : @vehicle.TransmissionTypeName</div>
-                                <p class="card-text mb-auto">Yakıt : @vehicle.FuelTypeName</p>
-                                <h2>@vehicle.Price.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</h2>
-                                @Html.ActionLink("Araç Detayı", "Detail", new { id = vehicle.Id })
+            @foreach (var vehicle in vehicles)
+            {
+                <div class="col-md-6">
+                    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-primary">@vehicle.VehicleBrandName</strong>
+                            <h3 class="mb-0">@vehicle.VehicleModelName</h3>
+                            <div class="mb-1 text-muted">Vites : @vehicle.TransmissionTypeName</div>
+                            <p class="card-text mb-auto">Yakıt : @vehicle.FuelTypeName</p>
+                            <h2>@vehicle.Price.ToString("C", System.Globalization.CultureInfo.CurrentCulture)</h2>
+                            @Html.ActionLink("Araç Detayı", "Detail", new { id = vehicle.Id })
 
-                            </div>
-                            <div class="col-auto d-none d-lg-block">
-                                <img src="/@(!string.IsNullOrEmpty(vehicle.ImageUrl) ? vehicle.ImageUrl : "img/cars/no-image.jpg")" alt="Alternate Text" class="img-thumbnail rounded" width="200" />
-                            </div>
-
+                        </div>
+                        <div class="col-auto d-none d-lg-block">
+                            <img src="/@(!string.IsNullOrEmpty(vehicle.ImageUrl) ? vehicle.ImageUrl : "~/img/cars/No_car.png")" alt="Alternate Text" class="img-thumbnail rounded" width="200" />
                         </div>
 
                     </div>
-                }
+
+                </div>
+            }
             @*</div>*@
         </div>
     </div>

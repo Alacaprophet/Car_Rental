@@ -1,12 +1,14 @@
 ﻿using Application.Services;
 using Application.Services.Concrete;
 using Domain.DTOs;
+using Domain.DTOs.Filter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
@@ -19,7 +21,9 @@ namespace WebApp.Controllers
         private IVehicleClassTypeService VehicleClassTypeService { get; set; }
         private IVehicleModelService VehicleModelService { get; set; }
         private IVehicleService VehicleService { get; set; }
-        public VehicleController(IVehicleService service, IColorTypeService colorTypeService, IFuelTypeService fuelTypeService, ITireTypeService tireTypeService, ITransmissionTypeService transmissionTypeService, IVehicleBrandService vehicleBrandService, IVehicleClassTypeService vehicleClassTypeService, IVehicleModelService vehicleModelService)
+        public IVehicleImageService VehicleImageService { get; set; }
+        public IVehicleRentalPriceService VehicleRentalPriceService { get; set; }
+        public VehicleController(IVehicleService service, IColorTypeService colorTypeService, IFuelTypeService fuelTypeService, ITireTypeService tireTypeService, ITransmissionTypeService transmissionTypeService, IVehicleBrandService vehicleBrandService, IVehicleClassTypeService vehicleClassTypeService, IVehicleModelService vehicleModelService, IVehicleImageService vehicleImageService, IVehicleRentalPriceService vehicleRentalPriceService)
         {
             VehicleService = service;
             ColorTypeService = colorTypeService;
@@ -28,6 +32,8 @@ namespace WebApp.Controllers
             TransmissionTypeService = transmissionTypeService;
             VehicleClassTypeService = vehicleClassTypeService;
             VehicleModelService = vehicleModelService;
+            VehicleImageService = vehicleImageService;
+            VehicleRentalPriceService = vehicleRentalPriceService;
         }
         private List<SelectListItem> GetVehicleModel()
         {
@@ -81,6 +87,15 @@ namespace WebApp.Controllers
             ViewBag.Vehicles = items;
             DropdownViewBag();
             return View(filter);
+        }
+        public IActionResult Detail(int id)
+        {
+            VehicleDetailViewModel vehicleDetail = new VehicleDetailViewModel();
+            vehicleDetail.Vehicle = VehicleService.GetDetail(id);
+            vehicleDetail.VehicleImages = VehicleImageService.GetByVehicle(id);
+            vehicleDetail.VehicleRentalPrices = VehicleRentalPriceService.Get(new VehicleRentalPriceFilter(id,DateTime.Today));
+            ViewBag.VehicleDetail = vehicleDetail;
+            return View();
         }
         public void DropdownViewBag()
         {
