@@ -9,22 +9,14 @@ namespace Domain.DTOs.Filter
 {
     public class VehicleRentalPriceFilter
     {
-        public VehicleRentalPriceFilter(int vehicleid)
+        public VehicleRentalPriceFilter(int vehicleid,DateTime? date=null)
         {
             VehicleId = vehicleid;
+            Date = date;
         }
 
         public int VehicleId { get; set; }
 
-       
-        public int RentalPeriodId { get; set; }
-      
-        public decimal Price { get; set; }
-        
-        public DateTime StartDate { get; set; }
-        
-        public DateTime EndDate { get; set; }
-        public Vehicle Vehicle { get; set; }
-        public RentalPeriod RentalPeriod { get; set; }
+        public DateTime? Date { get; set; }
     }
 }

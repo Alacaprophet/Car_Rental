@@ -24,7 +24,7 @@ namespace Application.Utilities.FileUpload.Concrete
                 await file.CopyToAsync(stream);
             }
 
-            return Response<FileUploadResult>.Success("", new FileUploadResult
+            return Response<FileUploadResult>.Succes("", new FileUploadResult
             {
                 //      img/cars/clio.jpg
                 Url = $"{directory}{fileName}"
@@ -37,7 +37,7 @@ namespace Application.Utilities.FileUpload.Concrete
             if(File.Exists(path))
             {
                 File.Delete(path);
-                return Response.Success();
+                return Response.Succes();
             }
             else
             {
